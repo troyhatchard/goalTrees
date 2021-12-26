@@ -14,7 +14,8 @@ module.exports = {
     '/docs',
     '/documents',
     '/logs',
-    '/node_modules'
+    '/node_modules',
+    '/public/js/client.js'
   ],
   rules: {
     'object-curly-newline': 'off',
@@ -29,8 +30,6 @@ module.exports = {
     indent: 'warn',
     'max-len': ['warn', { code: 100 }],
     'lines-between-class-members': 'warn',
-    'no-useless-constructor': 'off',
-    curly: 'off'
-    // 'one-var': 'warn'
+    'no-useless-constructor': 'warn'
   }
 }

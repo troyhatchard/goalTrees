@@ -1,1 +1,0 @@
-console.error("Error: Can't walk dependency graph: Cannot find module '/home/troyhatchard/workspace/goalTrees/client/js/client.js' from '/home/troyhatchard/workspace/goalTrees/client/js/_fake.js'\n    required by /home/troyhatchard/workspace/goalTrees/client/js/_fake.js");
