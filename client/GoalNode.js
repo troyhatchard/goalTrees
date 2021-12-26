@@ -13,6 +13,8 @@ class GoalNode {
     this.rectangle = rectangle
     this.children = children
     this.options = options
+    this.rightBound = rectangle.right
+    this.leftBound = rectangle.left
   }
 }
 

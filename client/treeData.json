@@ -1,0 +1,22 @@
+{
+  "Career": {
+    "color": "red",
+    "children": {
+      "Make 100k": {
+        "color": "#ffcccc"
+      },
+      "Make 200k": {
+        "color": "#ffcccc"
+      },
+      "Make 300k": {
+        "color": "#ffcccc"
+      }
+    }
+  },
+  "Health": {
+    "color": "blue"
+  },
+  "Family": {
+    "color": "green"
+  }
+}

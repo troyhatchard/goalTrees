@@ -14,14 +14,15 @@ class GoalNode {
     this.rectangle = rectangle
     this.children = children
     this.options = options
+    this.rightBound = rectangle.right
+    this.leftBound = rectangle.left
   }
 }
 
 module.exports = GoalNode
 
 },{}],2:[function(require,module,exports){
-const paper = require('paper')
-const GoalNode = require('./GoalNode')
+const drawPaper = require('./drawPaper')
 
 const $ = document.querySelector.bind(document)
 const $$ = document.querySelectorAll.bind(document)
@@ -34,23 +35,13 @@ window.onload = function () {
   drawPaper()
 }
 
-const treeData = {
-  Career: {
-    color: 'red',
-    subGoals: {
-      'Make 100k': { color: '#ffcccc' },
-      'Make 200k': { color: '#ffcccc' },
-      'Make 300k': { color: '#ffcccc' }
-    }
-  },
-  Health: {
-    color: 'blue'
-  },
-  Family: {
-    color: 'green'
-  }
+},{"./drawPaper":3}],3:[function(require,module,exports){
+const paper = require('paper')
+const treeData = require('./treeData.json')
 
-}
+const GoalNode = require('./GoalNode')
+
+const $ = document.querySelector.bind(document)
 
 function drawPaper () {
   // PaperJS setup
@@ -68,10 +59,10 @@ function drawPaper () {
    * This is my config secion. Probably will put this outside the file at some point and have it
    * editable by the user
   ***************************************/
-  const boxHeight = 100
-  const boxWidth = 200
+  const boxHeight = 30
+  const boxWidth = 60
   // const boxColor = 'red'
-  const boxSpacing = 50
+  const boxSpacing = 15
   const minZoom = 0.1
   const maxZoom = 2
 
@@ -89,7 +80,6 @@ function drawPaper () {
 
     // Zoom
     const newZoom = view.zoom + wheelClicks * -0.1
-    console.log(wheelClicks)
 
     if (newZoom > minZoom && newZoom < maxZoom) {
       // When we're zooming in, translate toward the mouse location when zooming
@@ -97,7 +87,6 @@ function drawPaper () {
 
       view.zoom = newZoom
     }
-    console.log('zoom', view.zoom)
   }
 
   /**************************************
@@ -129,20 +118,38 @@ function drawPaper () {
    * @param {object} parentData.goal parent goal
    * @param {object} parentData.rectangle parent node point
    */
+
+  // Drawing the first row
+  let index = 0
+  for (const goalName in treeData) {
+    const goal = treeData[goalName]
+    const point = new Point((index + 1) * boxSpacing + index * boxWidth, boxSpacing)
+    const rectSize = new Size(boxWidth, boxHeight)
+    const rect = new Rectangle(point, rectSize)
+    const node = new GoalNode(goalName, goal.color, rect, goal.children, {})
+    drawNode(node)
+    drawChildNodes(node)
+    index++
+  }
+
+  // view.zoom = 0.5
+
+  /**************************************
+   * Function Definitions
+  ***************************************/
+  // Animate frame event
+  view.onFrame = (event) => {
+
+  }
+
   function drawChildNodes (parent) {
-    console.log(parent)
-    const { rectangle, goal } = parent
-    const { subGoals } = goal
-    if (subGoals) {
+    const { children, rectangle } = parent
+    if (children) {
       // Relative position of the subgoal from the center of the parent
       let relativePos = 0
-      relativePos = Math.round(relativePos - Object.keys(subGoals).length / 2)
-      for (const goalName in subGoals) {
-        const subGoal = subGoals[goalName]
-        console.log(goalName)
-        console.log(subGoal)
-        console.log('relativePos', relativePos)
-
+      relativePos = Math.round(relativePos - Object.keys(children).length / 2)
+      for (const goalName in children) {
+        const subGoal = children[goalName]
         // Find where to place the subgoal
         const parentPoint = new Point(rectangle.bottomCenter)
         const point = new Point(parentPoint.subtract(
@@ -154,13 +161,14 @@ function drawPaper () {
           boxSpacing * -1
         ))
 
-        // console.log(point)
+        const subRect = new Rectangle(point, new Size(boxWidth, boxHeight))
+        const childNode = new GoalNode(goalName, subGoal.color, subRect, subGoal.children)
 
         // draw the subgoal as a rectangle
-        drawNode(point, subGoal.color, goalName)
+        drawNode(childNode)
 
         // draw the connecting line
-        // drawConnector(point, rectangle.bottomCenter)
+        drawConnector(rectangle, subRect)
 
         // increment index
         relativePos++
@@ -168,35 +176,22 @@ function drawPaper () {
     }
   }
 
-  // Drawing the first row
-  let index = 0
-  for (const goalName in treeData) {
-    const goal = treeData[goalName]
-    const point = new Point((index + 1) * boxSpacing + index * boxWidth, boxSpacing)
-    const rectSize = new Size(boxWidth, boxHeight)
-    const rect = new Rectangle(point, rectSize)
-    const node = new GoalNode(goalName, goal.color, rect, goal.subGoals, {})
-    const rectNode = drawNode(node)
-    drawChildNodes(node)
-    index++
-  }
+  function drawConnector (parent, child) {
+    const parentPoint = parent.bottomCenter
+    const childPoint = child.topCenter
 
-  view.zoom = 1
-
-  /**************************************
-   * Function Definitions
-  ***************************************/
-  // Animate frame event
-  view.onFrame = (event) => {
-
+    const childElbow = new Point(childPoint.x, (parentPoint.y + childPoint.y) / 2)
+    const parentElbow = new Point(parentPoint.x, (parentPoint.y + childPoint.y) / 2)
+    const conPath = new Path([parentPoint, parentElbow, childElbow, childPoint])
+    conPath.strokeColor = 'black'
+    console.log('Path', conPath)
   }
 
   function drawNode (node) {
     const { rectangle, color, name, options } = node
     const fillPath = new Path.Rectangle(rectangle)
     fillPath.fillColor = color
-    console.log(rectangle)
-    if (options.border) {
+    if (options && options.border) {
       const linePath = new Path.Rectangle(rectangle)
       linePath.strokeColor = 'black'
     }
@@ -208,7 +203,32 @@ function drawPaper () {
   }
 }
 
-},{"./GoalNode":1,"paper":5}],3:[function(require,module,exports){
+module.exports = drawPaper
+
+},{"./GoalNode":1,"./treeData.json":4,"paper":7}],4:[function(require,module,exports){
+module.exports={
+  "Career": {
+    "color": "red",
+    "children": {
+      "Make 100k": {
+        "color": "#ffcccc"
+      },
+      "Make 200k": {
+        "color": "#ffcccc"
+      },
+      "Make 300k": {
+        "color": "#ffcccc"
+      }
+    }
+  },
+  "Health": {
+    "color": "blue"
+  },
+  "Family": {
+    "color": "green"
+  }
+}
+},{}],5:[function(require,module,exports){
 (function (global, factory) {
   typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
   typeof define === 'function' && define.amd ? define(['exports'], factory) :
@@ -5396,9 +5416,9 @@ function drawPaper () {
 
 })));
 
-},{}],4:[function(require,module,exports){
+},{}],6:[function(require,module,exports){
 
-},{}],5:[function(require,module,exports){
+},{}],7:[function(require,module,exports){
 /*!
  * Paper.js v0.12.15 - The Swiss Army Knife of Vector Graphics Scripting.
  * http://paperjs.org/
@@ -22859,4 +22879,4 @@ if (typeof define === 'function' && define.amd) {
 return paper;
 }.call(this, typeof self === 'object' ? self : null);
 
-},{"./node/extend.js":4,"./node/self.js":4,"acorn":3}]},{},[2]);
+},{"./node/extend.js":6,"./node/self.js":6,"acorn":5}]},{},[2]);
