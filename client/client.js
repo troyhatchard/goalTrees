@@ -1,4 +1,5 @@
 const paper = require('paper')
+const GoalNode = require('./GoalNode')
 
 const $ = document.querySelector.bind(document)
 const $$ = document.querySelectorAll.bind(document)
@@ -15,9 +16,9 @@ const treeData = {
   Career: {
     color: 'red',
     subGoals: {
-      'Make 100k': {color: '#ffcccc'},
-      'Make 200k': {color: '#ffcccc'},
-      'Make 300k': {color: '#ffcccc'}
+      'Make 100k': { color: '#ffcccc' },
+      'Make 200k': { color: '#ffcccc' },
+      'Make 300k': { color: '#ffcccc' }
     }
   },
   Health: {
@@ -77,11 +78,9 @@ function drawPaper () {
     console.log('zoom', view.zoom)
   }
 
-
   /**************************************
    * Mouse Events
    ***************************************/
-
 
   view.onMouseDown = (e) => {
     view.lastMousePoint = e.point
@@ -149,10 +148,14 @@ function drawPaper () {
 
   // Drawing the first row
   let index = 0
-  for (const goal in treeData) {
+  for (const goalName in treeData) {
+    const goal = treeData[goalName]
     const point = new Point((index + 1) * boxSpacing + index * boxWidth, boxSpacing)
-    const rectNode = drawNode(point, treeData[goal].color, goal)
-    drawChildNodes({ goal: treeData[goal], rectangle: rectNode })
+    const rectSize = new Size(boxWidth, boxHeight)
+    const rect = new Rectangle(point, rectSize)
+    const node = new GoalNode(goalName, goal.color, rect, goal.subGoals, {})
+    const rectNode = drawNode(node)
+    drawChildNodes(node)
     index++
   }
 
@@ -166,19 +169,19 @@ function drawPaper () {
 
   }
 
-  function drawNode (point, fill, text) {
-    const rectSize = new Size(boxWidth, boxHeight)
-    const rect = new Rectangle(point, rectSize)
-    const fillPath = new Path.Rectangle(rect)
-    fillPath.fillColor = fill
-    const linePath = new Path.Rectangle(rect)
-    // linePath.strokeColor = 'black'
+  function drawNode (node) {
+    const { rectangle, color, name, options } = node
+    const fillPath = new Path.Rectangle(rectangle)
+    fillPath.fillColor = color
+    console.log(rectangle)
+    if (options.border) {
+      const linePath = new Path.Rectangle(rectangle)
+      linePath.strokeColor = 'black'
+    }
 
-    const pointText = new PointText(rect.center)
+    const pointText = new PointText(rectangle.center)
     pointText.justification = 'center'
     pointText.fillColor = 'black'
-    pointText.content = text
-
-    return rect
+    pointText.content = name
   }
 }

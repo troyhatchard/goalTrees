@@ -1,5 +1,27 @@
 (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
+class GoalNode {
+  /**
+   *
+   * @param {string} name
+   * @param {string} color
+   * @param {paper.Rectangle} rectangle
+   * @param {object} children
+   * @param {object} options
+   */
+  constructor (name, color, rectangle, children, options) {
+    this.name = name
+    this.color = color
+    this.rectangle = rectangle
+    this.children = children
+    this.options = options
+  }
+}
+
+module.exports = GoalNode
+
+},{}],2:[function(require,module,exports){
 const paper = require('paper')
+const GoalNode = require('./GoalNode')
 
 const $ = document.querySelector.bind(document)
 const $$ = document.querySelectorAll.bind(document)
@@ -16,9 +38,9 @@ const treeData = {
   Career: {
     color: 'red',
     subGoals: {
-      'Make 100k': {color: '#ffcccc'},
-      'Make 200k': {color: '#ffcccc'},
-      'Make 300k': {color: '#ffcccc'}
+      'Make 100k': { color: '#ffcccc' },
+      'Make 200k': { color: '#ffcccc' },
+      'Make 300k': { color: '#ffcccc' }
     }
   },
   Health: {
@@ -78,11 +100,9 @@ function drawPaper () {
     console.log('zoom', view.zoom)
   }
 
-
   /**************************************
    * Mouse Events
    ***************************************/
-
 
   view.onMouseDown = (e) => {
     view.lastMousePoint = e.point
@@ -150,10 +170,14 @@ function drawPaper () {
 
   // Drawing the first row
   let index = 0
-  for (const goal in treeData) {
+  for (const goalName in treeData) {
+    const goal = treeData[goalName]
     const point = new Point((index + 1) * boxSpacing + index * boxWidth, boxSpacing)
-    const rectNode = drawNode(point, treeData[goal].color, goal)
-    drawChildNodes({ goal: treeData[goal], rectangle: rectNode })
+    const rectSize = new Size(boxWidth, boxHeight)
+    const rect = new Rectangle(point, rectSize)
+    const node = new GoalNode(goalName, goal.color, rect, goal.subGoals, {})
+    const rectNode = drawNode(node)
+    drawChildNodes(node)
     index++
   }
 
@@ -167,24 +191,24 @@ function drawPaper () {
 
   }
 
-  function drawNode (point, fill, text) {
-    const rectSize = new Size(boxWidth, boxHeight)
-    const rect = new Rectangle(point, rectSize)
-    const fillPath = new Path.Rectangle(rect)
-    fillPath.fillColor = fill
-    const linePath = new Path.Rectangle(rect)
-    // linePath.strokeColor = 'black'
+  function drawNode (node) {
+    const { rectangle, color, name, options } = node
+    const fillPath = new Path.Rectangle(rectangle)
+    fillPath.fillColor = color
+    console.log(rectangle)
+    if (options.border) {
+      const linePath = new Path.Rectangle(rectangle)
+      linePath.strokeColor = 'black'
+    }
 
-    const pointText = new PointText(rect.center)
+    const pointText = new PointText(rectangle.center)
     pointText.justification = 'center'
     pointText.fillColor = 'black'
-    pointText.content = text
-
-    return rect
+    pointText.content = name
   }
 }
 
-},{"paper":4}],2:[function(require,module,exports){
+},{"./GoalNode":1,"paper":5}],3:[function(require,module,exports){
 (function (global, factory) {
   typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
   typeof define === 'function' && define.amd ? define(['exports'], factory) :
@@ -5372,9 +5396,9 @@ function drawPaper () {
 
 })));
 
-},{}],3:[function(require,module,exports){
-
 },{}],4:[function(require,module,exports){
+
+},{}],5:[function(require,module,exports){
 /*!
  * Paper.js v0.12.15 - The Swiss Army Knife of Vector Graphics Scripting.
  * http://paperjs.org/
@@ -22835,4 +22859,4 @@ if (typeof define === 'function' && define.amd) {
 return paper;
 }.call(this, typeof self === 'object' ? self : null);
 
-},{"./node/extend.js":3,"./node/self.js":3,"acorn":2}]},{},[1]);
+},{"./node/extend.js":4,"./node/self.js":4,"acorn":3}]},{},[2]);
