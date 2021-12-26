@@ -1,3 +1,5 @@
+const config = require('./config/default.json')
+
 const drawPaper = require('./drawPaper')
 
 const $ = document.querySelector.bind(document)

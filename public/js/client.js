@@ -22,6 +22,8 @@ class GoalNode {
 module.exports = GoalNode
 
 },{}],2:[function(require,module,exports){
+const config = require('./config/default.json')
+
 const drawPaper = require('./drawPaper')
 
 const $ = document.querySelector.bind(document)
@@ -35,9 +37,22 @@ window.onload = function () {
   drawPaper()
 }
 
-},{"./drawPaper":3}],3:[function(require,module,exports){
+},{"./config/default.json":3,"./drawPaper":4}],3:[function(require,module,exports){
+module.exports={
+  "message": "hello",
+  "boxHeight": 30,
+  "boxWidth": 60,
+  "boxColor": "red",
+  "boxSpacing": 15,
+  "minZoom": 0.1,
+  "maxZoom": 2
+}
+
+},{}],4:[function(require,module,exports){
 const paper = require('paper')
 const treeData = require('./treeData.json')
+
+const config = require('./config/default.json')
 
 const GoalNode = require('./GoalNode')
 
@@ -56,15 +71,8 @@ function drawPaper () {
 
   /**************************************
    * Config
-   * This is my config secion. Probably will put this outside the file at some point and have it
-   * editable by the user
   ***************************************/
-  const boxHeight = 30
-  const boxWidth = 60
-  // const boxColor = 'red'
-  const boxSpacing = 15
-  const minZoom = 0.1
-  const maxZoom = 2
+  const { boxHeight, boxWidth, boxSpacing, minZoom, maxZoom } = config
 
   /**************************************
    * View
@@ -205,7 +213,7 @@ function drawPaper () {
 
 module.exports = drawPaper
 
-},{"./GoalNode":1,"./treeData.json":4,"paper":7}],4:[function(require,module,exports){
+},{"./GoalNode":1,"./config/default.json":3,"./treeData.json":5,"paper":8}],5:[function(require,module,exports){
 module.exports={
   "Career": {
     "color": "red",
@@ -222,13 +230,21 @@ module.exports={
     }
   },
   "Health": {
-    "color": "blue"
+    "color": "blue",
+    "children": {
+      "Make 100k": {
+        "color": "#ccccff"
+      },
+      "Make 200k": {
+        "color": "#ccccff"
+      }
+    }
   },
   "Family": {
     "color": "green"
   }
 }
-},{}],5:[function(require,module,exports){
+},{}],6:[function(require,module,exports){
 (function (global, factory) {
   typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
   typeof define === 'function' && define.amd ? define(['exports'], factory) :
@@ -5416,9 +5432,9 @@ module.exports={
 
 })));
 
-},{}],6:[function(require,module,exports){
-
 },{}],7:[function(require,module,exports){
+
+},{}],8:[function(require,module,exports){
 /*!
  * Paper.js v0.12.15 - The Swiss Army Knife of Vector Graphics Scripting.
  * http://paperjs.org/
@@ -22879,4 +22895,4 @@ if (typeof define === 'function' && define.amd) {
 return paper;
 }.call(this, typeof self === 'object' ? self : null);
 
-},{"./node/extend.js":6,"./node/self.js":6,"acorn":5}]},{},[2]);
+},{"./node/extend.js":7,"./node/self.js":7,"acorn":6}]},{},[2]);

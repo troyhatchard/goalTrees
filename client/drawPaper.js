@@ -1,6 +1,8 @@
 const paper = require('paper')
 const treeData = require('./treeData.json')
 
+const config = require('./config/default.json')
+
 const GoalNode = require('./GoalNode')
 
 const $ = document.querySelector.bind(document)
@@ -18,15 +20,8 @@ function drawPaper () {
 
   /**************************************
    * Config
-   * This is my config secion. Probably will put this outside the file at some point and have it
-   * editable by the user
   ***************************************/
-  const boxHeight = 30
-  const boxWidth = 60
-  // const boxColor = 'red'
-  const boxSpacing = 15
-  const minZoom = 0.1
-  const maxZoom = 2
+  const { boxHeight, boxWidth, boxSpacing, minZoom, maxZoom } = config
 
   /**************************************
    * View

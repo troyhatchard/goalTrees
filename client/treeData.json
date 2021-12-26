@@ -14,7 +14,15 @@
     }
   },
   "Health": {
-    "color": "blue"
+    "color": "blue",
+    "children": {
+      "Make 100k": {
+        "color": "#ccccff"
+      },
+      "Make 200k": {
+        "color": "#ccccff"
+      }
+    }
   },
   "Family": {
     "color": "green"

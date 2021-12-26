@@ -1,0 +1,9 @@
+{
+  "message": "hello",
+  "boxHeight": 30,
+  "boxWidth": 60,
+  "boxColor": "red",
+  "boxSpacing": 15,
+  "minZoom": 0.1,
+  "maxZoom": 2
+}
