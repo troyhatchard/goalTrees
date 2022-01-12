@@ -215,10 +215,10 @@ module.exports = drawPaper
 
 },{"./GoalNode":1,"./config/default.json":3,"./treeData.json":5,"paper":8}],5:[function(require,module,exports){
 module.exports={
-  "Career": {
+  "asdf": {
     "color": "red",
     "children": {
-      "Make 100k": {
+      "Make 100K": {
         "color": "#ffcccc"
       },
       "Make 200k": {
@@ -240,8 +240,13 @@ module.exports={
       }
     }
   },
-  "Family": {
-    "color": "green"
+  "Meaning": {
+    "color": "green",
+    "children": {
+      "Create a tree farm": {
+        "color": "#ccffcc"
+      }
+    }
   }
 }
 },{}],6:[function(require,module,exports){

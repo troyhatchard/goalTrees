@@ -1,8 +1,8 @@
 {
-  "Career": {
+  "asdf": {
     "color": "red",
     "children": {
-      "Make 100k": {
+      "Make 100K": {
         "color": "#ffcccc"
       },
       "Make 200k": {
@@ -24,7 +24,12 @@
       }
     }
   },
-  "Family": {
-    "color": "green"
+  "Meaning": {
+    "color": "green",
+    "children": {
+      "Create a tree farm": {
+        "color": "#ccffcc"
+      }
+    }
   }
 }
