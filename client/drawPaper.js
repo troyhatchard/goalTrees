@@ -69,13 +69,6 @@ function drawPaper () {
    * Drawing
   ***************************************/
 
-  /**
-   * Draw Child Nodes
-   * @param {object} parentData parent object data
-   * @param {object} parentData.goal parent goal
-   * @param {object} parentData.rectangle parent node point
-   */
-
   // Drawing the first row
   let index = 0
   for (const goalName in treeData) {
@@ -99,6 +92,12 @@ function drawPaper () {
 
   }
 
+    /**
+   * Draw Child Nodes
+   * @param {object} parentData parent object data
+   * @param {object} parentData.goal parent goal
+   * @param {object} parentData.rectangle parent node point
+   */
   function drawChildNodes (parent) {
     const { children, rectangle } = parent
     if (children) {
