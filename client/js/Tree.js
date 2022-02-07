@@ -24,7 +24,10 @@ class TreeNode {
 // Tree data structure
 class Tree {
   constructor (treeData) {
-    // Nodes {object} // Key value pairs of an id and a node object
+    // Key value pairs of an id and a node object. Basically this is used like an array but with unique keys
+    // whose values don't change.
+    // Nodes {object}
+    this.lastId = 0
 
   }
 
@@ -34,11 +37,16 @@ class Tree {
    * @param {int} parentId // The id number of the parent
    */
   addNode (treeNode, parentId) {
-    // Add the node to the array
-    const newId = this.nodes.push(treeNode)
+    const { nodes } = this
+    // Add the node to the nodes object
+    const newId = lastId + 1
+    nodes.newId = treeNode
 
     // Add the node's id to the list of children in its parent
-    this.nodes[parentId].children.push(newId)
+    nodes[parentId].children.push(newId)
+
+    // Set the last id so the next node can be added on the next call to this function
+    this.lastId = newId
 
   }
 }
