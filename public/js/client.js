@@ -1,27 +1,4 @@
 (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
-class GoalNode {
-  /**
-   *
-   * @param {string} name
-   * @param {string} color
-   * @param {paper.Rectangle} rectangle
-   * @param {object} children
-   * @param {object} options
-   */
-  constructor (name, color, rectangle, children, options) {
-    this.name = name
-    this.color = color
-    this.rectangle = rectangle
-    this.children = children
-    this.options = options
-    this.rightBound = rectangle.right
-    this.leftBound = rectangle.left
-  }
-}
-
-module.exports = GoalNode
-
-},{}],2:[function(require,module,exports){
 const config = require('./config/default.json')
 
 const drawPaper = require('./drawPaper')
@@ -37,7 +14,7 @@ window.onload = function () {
   drawPaper()
 }
 
-},{"./config/default.json":3,"./drawPaper":4}],3:[function(require,module,exports){
+},{"./config/default.json":2,"./drawPaper":3}],2:[function(require,module,exports){
 module.exports={
   "message": "hello",
   "boxHeight": 30,
@@ -48,13 +25,13 @@ module.exports={
   "maxZoom": 2
 }
 
-},{}],4:[function(require,module,exports){
+},{}],3:[function(require,module,exports){
 const paper = require('paper')
 const treeData = require('./treeData.json')
 
 const config = require('./config/default.json')
 
-const GoalNode = require('./GoalNode')
+const { Tree, TreeNode } = require('./js/Tree')
 
 const $ = document.querySelector.bind(document)
 
@@ -120,100 +97,246 @@ function drawPaper () {
    * Drawing
   ***************************************/
 
-  /**
-   * Draw Child Nodes
-   * @param {object} parentData parent object data
-   * @param {object} parentData.goal parent goal
-   * @param {object} parentData.rectangle parent node point
-   */
+  const tree = new Tree()
+  const node1 = new TreeNode('Goal1')
+  const node2 = new TreeNode('Goal2')
+  const node3 = new TreeNode('Goal3')
+  const node4 = new TreeNode('Goal4')
+  const node5 = new TreeNode('Goal5')
 
-  // Drawing the first row
-  let index = 0
-  for (const goalName in treeData) {
-    const goal = treeData[goalName]
-    const point = new Point((index + 1) * boxSpacing + index * boxWidth, boxSpacing)
-    const rectSize = new Size(boxWidth, boxHeight)
-    const rect = new Rectangle(point, rectSize)
-    const node = new GoalNode(goalName, goal.color, rect, goal.children, {})
-    drawNode(node)
-    drawChildNodes(node)
-    index++
-  }
 
-  // view.zoom = 0.5
 
-  /**************************************
-   * Function Definitions
-  ***************************************/
-  // Animate frame event
-  view.onFrame = (event) => {
+  tree.addNode(node1)
+  tree.addNode(node2, 1)
+  tree.addNode(node3, 1)
+  tree.addNode(node4, 1)
+  tree.addNode(node5, 1)
 
-  }
 
-  function drawChildNodes (parent) {
-    const { children, rectangle } = parent
-    if (children) {
-      // Relative position of the subgoal from the center of the parent
-      let relativePos = 0
-      relativePos = Math.round(relativePos - Object.keys(children).length / 2)
-      for (const goalName in children) {
-        const subGoal = children[goalName]
-        // Find where to place the subgoal
-        const parentPoint = new Point(rectangle.bottomCenter)
-        const point = new Point(parentPoint.subtract(
-          (
-            boxWidth * relativePos +
-            boxSpacing * relativePos +
-            boxWidth / 2
-          ),
-          boxSpacing * -1
-        ))
 
-        const subRect = new Rectangle(point, new Size(boxWidth, boxHeight))
-        const childNode = new GoalNode(goalName, subGoal.color, subRect, subGoal.children)
+  // console.log({ nodes: tree.nodes })
 
-        // draw the subgoal as a rectangle
-        drawNode(childNode)
+  drawNodes(tree.nodes)
 
-        // draw the connecting line
-        drawConnector(rectangle, subRect)
+  // // Drawing the first row
+  // let index = 0
+  // for (const goalName in treeData) {
+  //   const goal = treeData[goalName]
+  //   const point = new Point((index + 1) * boxSpacing + index * boxWidth, boxSpacing)
+  //   const rectSize = new Size(boxWidth, boxHeight)
+  //   const rect = new Rectangle(point, rectSize)
+  //   const node = new GoalNode(goalName, goal.color, rect, goal.children, {})
+  //   drawNode(node)
+  //   drawChildNodes(node)
+  //   index++
+  // }
 
-        // increment index
-        relativePos++
-      }
-    }
-  }
+  // // view.zoom = 0.5
 
-  function drawConnector (parent, child) {
-    const parentPoint = parent.bottomCenter
-    const childPoint = child.topCenter
+  // /**************************************
+  //  * Function Definitions
+  // ***************************************/
+  // // Animate frame event
+  // view.onFrame = (event) => {
 
+  // }
+
+  //   /**
+  //  * Draw Child Nodes
+  //  * @param {object} parentData parent object data
+  //  * @param {object} parentData.goal parent goal
+  //  * @param {object} parentData.rectangle parent node point
+  //  */
+  // function drawChildNodes (parent) {
+  //   const { children, rectangle } = parent
+  //   if (children) {
+  //     // Relative position of the subgoal from the center of the parent
+  //     let relativePos = 0
+  //     relativePos = Math.round(relativePos - Object.keys(children).length / 2)
+  //     for (const goalName in children) {
+  //       const subGoal = children[goalName]
+  //       // Find where to place the subgoal
+  //       const parentPoint = new Point(rectangle.bottomCenter)
+  //       const point = new Point(parentPoint.subtract(
+  //         (
+  //           boxWidth * relativePos +
+  //           boxSpacing * relativePos +
+  //           boxWidth / 2
+  //         ),
+  //         boxSpacing * -1
+  //       ))
+
+  //       const subRect = new Rectangle(point, new Size(boxWidth, boxHeight))
+  //       const childNode = new GoalNode(goalName, subGoal.color, subRect, subGoal.children)
+
+  //       // draw the subgoal as a rectangle
+  //       drawNode(childNode)
+
+  //       // draw the connecting line
+  //       drawConnector(rectangle, subRect)
+
+  //       // increment index
+  //       relativePos++
+  //     }
+  //   }
+  // }
+
+  function drawConnector (parentPoint, childPoint) {
     const childElbow = new Point(childPoint.x, (parentPoint.y + childPoint.y) / 2)
     const parentElbow = new Point(parentPoint.x, (parentPoint.y + childPoint.y) / 2)
     const conPath = new Path([parentPoint, parentElbow, childElbow, childPoint])
+    conPath.strokeWidth = 2
     conPath.strokeColor = 'black'
-    console.log('Path', conPath)
   }
 
-  function drawNode (node) {
-    const { rectangle, color, name, options } = node
-    const fillPath = new Path.Rectangle(rectangle)
-    fillPath.fillColor = color
-    if (options && options.border) {
-      const linePath = new Path.Rectangle(rectangle)
-      linePath.strokeColor = 'black'
-    }
+  function drawNodes (nodesObject) {
 
-    const pointText = new PointText(rectangle.center)
-    pointText.justification = 'center'
-    pointText.fillColor = 'black'
-    pointText.content = name
+    for (const node of Object.values(nodesObject)) {
+      const point = new Point(node.position.x, node.position.y)
+      const rectSize = new Size(node.width, node.height)
+      const rect = new Rectangle(point, rectSize)
+
+      const rectPath = new Path.Rectangle(rect)
+      rectPath.fillColor = 'red'
+      rectPath.strokeColor = 'black'
+
+      const pointText = new PointText(rect.center)
+      pointText.justification = 'center'
+      pointText.fillColor = 'black'
+      pointText.content = node.name
+
+      // If node has a parent, draw the connector
+      const parentPoint = new Point(node.position.x + (boxWidth / 2), node.position.y + boxHeight)
+      for (const childId of node.children) {
+        const child = nodesObject[childId]
+        // console.log({ childId, nodesObject })
+        const childPoint = new Point(child.position.x + (boxWidth / 2), child.position.y)
+        drawConnector(parentPoint, childPoint)
+      }
+    }
   }
 }
 
 module.exports = drawPaper
 
-},{"./GoalNode":1,"./config/default.json":3,"./treeData.json":5,"paper":8}],5:[function(require,module,exports){
+},{"./config/default.json":2,"./js/Tree":4,"./treeData.json":5,"paper":8}],4:[function(require,module,exports){
+const config = require('../config/default.json')
+const Paper = require('paper')
+
+const { boxHeight, boxWidth, boxSpacing } = config
+
+class TreeNode {
+  constructor (name, options) {
+    Object.assign(this, {
+      name,
+      height: options && options.height ? options.height : boxHeight,
+      width: options && options.width ? options.width : boxWidth,
+      children: []
+
+    })
+  }
+
+  rightBound () {
+    return position.x + width
+  }
+
+  leftBound () {
+    return position.x
+  }
+
+  setPosition(x, y) {
+    this.position = { x, y }
+  }
+
+}
+
+// Tree data structure
+class Tree {
+  constructor () {
+    // Key value pairs of an id and a node object. Basically this is used like an array but with unique keys
+    // whose values don't change.
+    this.nodes = {}
+    this.rootNodes = []
+    this.rows = {}
+    this.lastId = 0
+
+
+  }
+
+  /**
+   *
+   * @param {TreeNode} treeNode
+   * @param {int} parentId // The id number of the parent
+   */
+  addNode (node, parentId) {
+    const { nodes, lastId } = this
+    // Add the node to the nodes object
+    const newId = lastId + 1
+
+    // Add the node's id to the list of children in its parent
+    // When we add a new node, we need to reposition the children in the tree to make sure none are overlapping
+    if (parentId) {
+      const parent = nodes[parentId]
+      const { children } = parent
+      children.push(newId)
+
+      const sectionWidth = boxWidth + boxSpacing
+
+
+      for (const childIndex in children) {
+        // For all the existing nodes, get them from the nodelist
+        const currentNode = nodes[children[childIndex]] || node
+
+        // Calculate the position based on the parent
+        const sectionNum = children.length
+        const rowWidth = sectionNum * sectionWidth
+
+        // We add the childIndex * sectionWidth to parent position get the node's startingx
+        // relative to the parent. Then we subtract half of rowWidth to center the row on the parent
+        let nodeX = parent.position.x + (childIndex * sectionWidth) - (rowWidth / 2) + (sectionWidth / 2)
+
+        // If it's an odd number, we need to subtract half a sectionWidth to center the row
+        // nodeX = sectionNum % 2 !== 0 ? nodeX - sectionWidth / 2 : nodeX
+
+        console.log({ nodeX, children: children, childIndex, parentPos: parent.position.x, sectionWidth, rowWidth })
+
+        currentNode.setPosition(nodeX, parent.position.y + parent.height + boxSpacing)
+      }
+    } else {
+      node.position = { x: 0, y: 0 }
+    }
+    nodes[newId] = node
+
+    // Set the last id so the next node can be added on the next call to this function
+    this.lastId = newId
+
+
+  }
+
+  /**
+   *
+   * @param {Paper} paper
+   */
+  draw (paper) {
+    const { Point, Size, Rectangle, Path, view, PointText } = paper
+
+    for (const node of Object.values(this.nodes)) {
+      const point = new Point(node.position.x, node.position.y)
+      const rectSize = new Size(node.width, node.height)
+      const rect = new Rectangle(point, rectSize)
+
+      const rectPath = new Path.Rectangle(rect)
+      rectPath.fillColor = 'red'
+      rectPath.strokeColor = 'black'
+    }
+
+  }
+}
+
+module.exports.TreeNode = TreeNode
+module.exports.Tree = Tree
+
+},{"../config/default.json":2,"paper":8}],5:[function(require,module,exports){
 module.exports={
   "asdf": {
     "color": "red",
@@ -22900,4 +23023,4 @@ if (typeof define === 'function' && define.amd) {
 return paper;
 }.call(this, typeof self === 'object' ? self : null);
 
-},{"./node/extend.js":7,"./node/self.js":7,"acorn":6}]},{},[2]);
+},{"./node/extend.js":7,"./node/self.js":7,"acorn":6}]},{},[1]);
