@@ -75,6 +75,9 @@ function drawPaper () {
   const node3 = new TreeNode('Goal3')
   const node4 = new TreeNode('Goal4')
   const node5 = new TreeNode('Goal5')
+  const node6 = new TreeNode('Goal6')
+  const node7 = new TreeNode('Goal7')
+
 
 
 
@@ -84,12 +87,18 @@ function drawPaper () {
   tree.addNode(node4, 1)
   tree.addNode(node5, 1)
 
+  tree.addNode(node6, 3)
+  tree.addNode(node7, 3)
+
+
 
 
   // console.log({ nodes: tree.nodes })
 
   drawNodes(tree.nodes)
 
+  const treeCenter = new Point(tree.nodes[1].position.x, tree.nodes[1].position.y)
+  view.center = treeCenter
   // // Drawing the first row
   // let index = 0
   // for (const goalName in treeData) {
