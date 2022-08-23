@@ -6,6 +6,11 @@ body {
 a {
   color: #00B7FF;
 }
+
+#intro {
+  width: 50%
+}
+
 #main {
   display: flex
 }
