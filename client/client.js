@@ -1,9 +1,9 @@
 const config = require('./config/default.json')
+const GTG = require('./GTG')
 
 const $ = document.querySelector.bind(document)
 const $$ = document.querySelectorAll.bind(document)
 
-console.log('loaded client.js')
+const treeBox = $('#tree')
 
-// const $genBoxes = $('#genBoxes')
-// $genBoxes.addEventListener('click', newBox)
+const gtg = new GTG(treeBox)

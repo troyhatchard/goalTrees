@@ -11,15 +11,16 @@ a {
   width: 50%
 }
 
-#main {
-  display: flex
-}
-
-#canvas {
-  border: 1px solid black;
-  width: 100%;
-}
-
 #controls {
+
+}
+
+#tree {
+  border: 1px solid black
+}
+
+.goal
+
+.goal.top {
 
 }
