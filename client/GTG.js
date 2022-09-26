@@ -27,11 +27,13 @@ class GTG {
     $addGoal.addEventListener('click', () => {
       this.addGoal()
     })
+    this.buildTree()
   }
 
   buildTree () {
     const { $container, tree } = this
 
+    console.log({ tree })
     // clear the tree container
     $container.innerHTML = ''
 
@@ -39,23 +41,36 @@ class GTG {
     printWithChildren(tree.nodes[0], $container)
 
     // Print a node and all its children recursiels
-    function printWithChildren (node, parentEl) {
+    function printWithChildren (node, $parentEl) {
       // print the node
-        $nodeContainer = $('div')
-        $parentEl.appendChild($nodeContainer)
+        const $branchContainer = document.createElement('div')
+        $parentEl.appendChild($branchContainer)
+        $branchContainer.classList.add('branch-container')
 
-        const $node = $('div')
+        const $goalContainer = document.createElement('div')
+        $goalContainer.classList.add('goal-container')
+
+        $branchContainer.appendChild($goalContainer)
+
+        const $node = document.createElement('div')
+        $node.classList.add('goal')
         $node.innerText = node.name
-        $nodeContainer.appendChild($node)
-      //print the node's children
-      node.children.forEach(child => {
-        if (child.children && child.children.length) {
-          printChildren(child, $nodeContainer)
-          return
-        } else return
+        $goalContainer.appendChild($node)
 
-      })
-    }
+        const $childrenContainer = document.createElement('div')
+        $childrenContainer.classList.add('children-container')
+        $branchContainer.appendChild($childrenContainer)
+
+        console.log({ children: node.children })
+        if (node.children && node.children.length) {
+          //print the node's children
+          node.children.forEach(childId => {
+              const child = tree.nodes[childId]
+              printWithChildren(child, $childrenContainer)
+              return
+            })
+          } else return
+          }
 
 
   }

@@ -47,7 +47,7 @@ class Tree {
 
     // Add the node's id to the list of children in its parent
       nodes[parentId].children.push(newId)
-      node.parentId = [parentId]
+      node.parentId = parentId
 
     // Set the last id so the next node can be added on the next call to this function
     this.lastId = newId
