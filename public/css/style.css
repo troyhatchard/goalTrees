@@ -15,6 +15,28 @@ a {
 
 }
 
+.window {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  background-color: #FFFFFFAC;
+  overflow: hidden;
+}
+
+.window .content {
+  position: relative;
+  max-width: 400px;
+  min-height: 200px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 25%;
+  background-color: white;
+  padding: 1em;
+  border: 1px solid black;
+}
+
 #tree {
   border: 1px solid black
 }
@@ -41,4 +63,20 @@ a {
 .children-container {
   width: 100%;
   display: flex;
+}
+
+.goalForm {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: .25em;
+}
+
+.goalForm input {
+  height: 1em;
+  grid-column: span 2;
+}
+
+.goalForm button {
+  height: 2em;
+  grid-column: 3;
 }
