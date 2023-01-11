@@ -2,20 +2,19 @@
 const $ = document.querySelector.bind(document)
 const $$ = document.querySelectorAll.bind(document)
 
-const { Tree, TreeNode } = require('./models/Tree')
+const Tree = require('./models/Tree')
+const TreeNode = require('../shared/TreeNode')
 const Window = require('./components/window')
 
 class GTG {
-  constructor ($container) {
+  constructor ($container, treeName) {
     this.$container = $container
-    this.tree = new Tree()
-    const testChildren = [
-      new TreeNode('Health'),
-      new TreeNode('Career'),
-      new TreeNode('Family')
-    ]
-    testChildren.forEach((child) => this.tree.addNode(child, 0))
-    this.build()
+    Tree.load(treeName)
+      .then((tree) => {
+        this.tree = tree
+        console.log({ gTree: this.tree })
+        this.build()
+      })
   }
 
   build () {
@@ -95,7 +94,6 @@ class GTG {
 
     // Parent Input
     const $parentInput = document.createElement('select')
-    console.log({ treel: this.tree })
     Object.keys(tree.nodes).forEach(id => {
       const $option = document.createElement('option')
       $option.value = id
@@ -107,10 +105,13 @@ class GTG {
     // Save Button
     const $saveButton = document.createElement('button')
     $saveButton.innerText = 'Save'
-    $saveButton.addEventListener('click', () => {
-      tree.addNode(new TreeNode($nameInput.value), $parentInput.value)
-      this.buildTree()
-      $form.parentElement.remove()
+    $saveButton.addEventListener('click', async () => {
+      try {
+        tree.addNode(new TreeNode($nameInput.value), $parentInput.value)
+        tree.save()
+        this.buildTree()
+        $form.parentElement.remove()
+      } catch (err) { throw err }
     })
     $form.append($saveButton)
 

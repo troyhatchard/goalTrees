@@ -1,11 +1,16 @@
+require('dotenv').config()
+const config = require('config')
 const createError = require('http-errors')
 const express = require('express')
 const path = require('path')
 const cookieParser = require('cookie-parser')
 const logger = require('morgan')
+const mongoose = require('mongoose')
 
 const indexRouter = require('./routes/index')
 const usersRouter = require('./routes/users')
+
+const { db } = config
 
 const app = express()
 
@@ -21,6 +26,14 @@ app.use(express.static(path.join(__dirname, 'public')))
 
 app.use('/', indexRouter)
 app.use('/users', usersRouter)
+app.use('/trees', require('./routes/trees'))
+
+// Database setup
+const dbURI = `mongodb+srv://${db.username}:${db.password}@${db.clusterURI}`
+console.log({ dbURI })
+mongoose.connect(dbURI).then(() => {
+  console.log('connected to mongodb')
+})
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

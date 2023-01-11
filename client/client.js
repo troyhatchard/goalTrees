@@ -6,4 +6,4 @@ const $$ = document.querySelectorAll.bind(document)
 
 const treeBox = $('#tree')
 
-const gtg = new GTG(treeBox)
+const gtg = new GTG(treeBox, 'new tree')

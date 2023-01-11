@@ -71,8 +71,8 @@ a {
   gap: .25em;
 }
 
-.goalForm input {
-  height: 1em;
+.goalForm input, .goalForm select {
+  height: 1.5em;
   grid-column: span 2;
 }
 
